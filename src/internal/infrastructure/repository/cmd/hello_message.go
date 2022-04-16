@@ -1,20 +1,18 @@
 package cmd
 
-import "log"
-
 type repository struct {
+	listName []string
 }
 
 func NewHelloMessageRepo() *repository {
 	return &repository{}
 }
 
-func (r *repository) Save(message string) error {
-	log.Println("on file repo" + message)
+func (r *repository) Save(name string) error {
+	r.listName = append(r.listName, name)
 	return nil
 }
 
-func (r *repository) GetMessage() string {
-	log.Println("get message")
-	return "kaiba"
+func (r *repository) GetList() []string {
+	return r.listName
 }

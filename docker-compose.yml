@@ -1,0 +1,13 @@
+version: '3.3'
+services:
+  db:
+    image: mysql:8.0.28-oracle
+    container_name: message_databases
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'messages'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'admin'
+      MYSQL_ROOT_PASSWORD: 'admin'
+    ports:
+      - '3306:3306'
