@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/joho/godotenv"
 	"go.hex-architecture/internal/core/service"
+	"go.hex-architecture/internal/infrastructure/http/gin_engine"
 	"go.hex-architecture/internal/infrastructure/repository/cmd"
 	"go.hex-architecture/internal/infrastructure/repository/file"
 	"go.hex-architecture/internal/infrastructure/repository/mysql"
@@ -17,12 +18,14 @@ func main() {
 	if err != nil {
 		log.Fatalf("Some error occured. Err: %s", err)
 	}
+	cmd.ClearScreen()
 	fmt.Println("Register a list of names:")
 	fmt.Println("Choose an option to save the list")
 	fmt.Println("Select an option")
 	fmt.Println("1) Console")
 	fmt.Println("2) File")
 	fmt.Println("3) Database")
+	fmt.Println("4) Webservice")
 	var option int
 	_, err = fmt.Scanln(&option)
 	if err != nil {
@@ -37,10 +40,21 @@ func main() {
 		helloMsg = service.NewHelloMessage(file.NewHelloMessageRepo())
 	case 3:
 		helloMsg = service.NewHelloMessage(mysql.NewHelloMessageRepo())
+	case 4:
+		log.Println("Use a requet tool for test webservice")
+		go func() {
+			var server *service.HttpServerSrv
+			_, err = server.Server(gin_engine.Server())
+			if err != nil {
+				fmt.Println(err.Error())
+				return
+			}
+		}()
 	default:
 		fmt.Println("option not valid.")
 		os.Exit(0)
 	}
+	cmd.ClearScreen()
 	condition := true
 	var name string
 	var controlList string
@@ -66,29 +80,10 @@ func main() {
 		if strings.ToLower(controlList) != "s" {
 			condition = false
 		}
+		cmd.ClearScreen()
 	}
 	list := helloMsg.Repository.GetList()
 	for _, message := range list {
 		fmt.Println(message)
 	}
-	/*
-		log.Println(message)
-		/*router := gin.Default()
-		router.GET("/", func(c *gin.Context) {
-			helloSrv.CreateMessage("kaiba")
-			err := helloSrv.Repository.Save(helloSrv.HelloMsg.Message)
-			if err != nil {
-				return
-			}
-			helloSrv = service.NewHelloMessage(cmd.NewHelloMessageRepo())
-			helloSrv.CreateMessage("zero ")
-			err = helloSrv.Repository.Save(helloSrv.HelloMsg.Message)
-			if err != nil {
-				return
-			}
-			c.JSON(http.StatusOK, gin.H{
-				"system": helloSrv.HelloMsg.Message,
-			})
-		})
-		router.Run()*/
 }

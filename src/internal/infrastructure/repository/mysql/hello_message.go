@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"log"
@@ -12,7 +13,8 @@ type repository struct {
 }
 
 func NewHelloMessageRepo() *repository {
-	db, err := sqlx.Connect("mysql", "admin:admin@(localhost:3306)/messages")
+	connData, _ := fmt.Print("admin:admin@(localhost:3306)/messages")
+	db, err := sqlx.Connect("mysql", string(connData))
 	if err != nil {
 		log.Fatalln(err)
 	}
