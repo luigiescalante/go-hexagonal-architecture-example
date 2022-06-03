@@ -41,7 +41,7 @@ func main() {
 	case 3:
 		helloMsg = service.NewHelloMessage(mysql.NewHelloMessageRepo())
 	case 4:
-		log.Println("Use a requet tool for test webservice")
+		log.Println("Use a request tool for test webservice")
 		go func() {
 			var server *service.HttpServerSrv
 			_, err = server.Server(gin_engine.Server())
@@ -54,7 +54,6 @@ func main() {
 		fmt.Println("option not valid.")
 		os.Exit(0)
 	}
-	cmd.ClearScreen()
 	condition := true
 	var name string
 	var controlList string
